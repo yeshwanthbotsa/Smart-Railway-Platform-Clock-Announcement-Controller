@@ -1,0 +1,27 @@
+# Keil build outputs
+*.o
+*.d
+*.crf
+*.axf
+*.hex
+*.map
+*.lst
+*.lnp
+*.plg
+*.dep
+*.tra
+
+# Generated HTML/build reports
+*.htm
+
+# Keil user-specific configuration
+*.uvopt
+*.uvoptx
+*.uvgui*
+*.bak
+
+# Build/output directories
+Debug/
+Release/
+Objects/
+Listings/
