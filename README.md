@@ -1,76 +1,90 @@
 Smart Railway Platform Clock & Announcement Controller
 
-An embedded C-based railway platform information and announcement controller developed using the ARM7-based LPC2148 microcontroller. The system integrates an RTC, 16×2 LCD, 4×4 matrix keypad, LEDs, buzzer control, and external interrupt to automate train schedule monitoring and passenger information display.
+An Embedded C based railway platform information system developed using the LPC2148 ARM7 microcontroller.
+
+The project is designed to automatically monitor train schedules using a Real-Time Clock (RTC), identify the upcoming train, and display useful train information such as train number, destination, arrival time, departure time, and platform information on a 16×2 LCD.
+
+The system also provides LED-based train status indication, buzzer alerts, and an administrator mode for updating train schedules and correcting the RTC through a 4×4 matrix keypad.
 
 📌 Project Overview
 
-The Smart Railway Platform Clock & Announcement Controller is designed to automate railway platform information management and reduce manual intervention.
+At a railway platform, passengers need accurate information about:
 
-The controller continuously monitors the real-time clock and compares the current time with stored train schedules. Based on the schedule, it automatically selects the next train and displays relevant train information on the LCD.
+Which train is arriving next?
 
-The system also provides an administrator configuration mode triggered through an external interrupt (EINT1). In this mode, train schedule parameters and RTC date/time settings can be modified using the 4×4 keypad.
+What is the train's destination?
 
-The project uses modular Embedded C programming with separate modules for LCD, keypad, RTC, external interrupt, train database, administration, delay calculation, and train status management.
+When will it arrive?
 
-🎯 Objectives
+When will it depart?
 
-Display the current date and time using the RTC.
+Which platform is it using?
 
-Display upcoming train information.
+Is the train on time or delayed?
 
-Store multiple train records.
+This project implements a small embedded system to automate these tasks.
 
-Compare RTC time with stored train timings.
+The RTC continuously maintains the current date and time. The controller compares the current RTC time with the stored train schedule and determines which train should currently be displayed.
 
-Automatically select the next train that has not departed.
+The selected train information is then shown on the 16×2 LCD. The system can also indicate train status using LEDs and provide an audible indication through a buzzer.
 
-Calculate train delay from updated arrival time.
+An administrator can enter a configuration mode using an external interrupt and the 4×4 keypad. This allows train schedule information and RTC settings to be modified without changing the source code.
 
-Display train information using the LCD.
+🎯 Project Aim
 
-Provide LED-based train status indication.
+To develop a Smart Railway Platform Clock & Announcement Controller that automatically manages:
 
-Provide buzzer control as part of train-status logic.
+Train schedule monitoring
 
-Allow administrator modification of train schedules.
+Real-time clock synchronization
 
-Allow RTC date and time correction.
+Train delay indication
 
-Automatically update platform information based on the RTC.
+Passenger information display
 
-Implement the system using modular Embedded C programming.
+Train status indication
 
-✨ Features
+Administrator schedule updates
 
-LPC2148 ARM7 microcontroller
+The overall goal is to reduce manual intervention and provide passengers with continuously updated railway information.
 
-RTC-based train scheduling
+✨ Main Features
 
-16×2 LCD interfacing
+LPC2148 ARM7 microcontroller based system
 
-4×4 matrix keypad interfacing
+RTC-based real-time date and time display
 
-Train database management
+16×2 LCD interface
 
-Automatic next-train selection
+4×4 matrix keypad interface
+
+Multiple train schedule records
+
+Automatic upcoming-train selection
+
+Arrival and departure time display
+
+Platform information display
 
 Train delay calculation
 
-LED-based train status indication
+Green, Yellow, and Red LED status indication
 
-Buzzer control integrated with train-status logic
+Buzzer-based audible notification
 
-External interrupt-based administrator mode
+External interrupt based administrator mode
 
-RTC date and time configuration
+Train schedule modification through keypad
 
-Scrolling train information display
+RTC date and time modification
 
-Modular Embedded C architecture
+Scrolling train name and destination display
+
+Modular Embedded C software design
 
 🧰 Hardware Requirements
 
-Component
+Hardware
 
 Purpose
 
@@ -80,11 +94,11 @@ Main ARM7 microcontroller
 
 16×2 LCD
 
-Displays time and train information
+Displays RTC and train information
 
 4×4 Matrix Keypad
 
-Train schedule and administrator input
+User and administrator input
 
 RTC
 
@@ -96,11 +110,15 @@ Indicates train status
 
 Buzzer
 
-Audible status indication
+Provides audible notification
 
-External Interrupt Switch
+Admin Edit Switch
 
-Enters administrator mode
+Generates external interrupt
+
+USB-UART Converter / DB-9 Cable
+
+Communication/programming support
 
 💻 Software Requirements
 
@@ -112,117 +130,99 @@ Flash Magic
 
 LPC2148 development board
 
-🏗️ System Architecture
+🔄 How the System Works
 
-                  +-------------------+
-                  |      LPC2148      |
-                  |     ARM7 MCU      |
-                  +---------+---------+
-                            |
-          +-----------------+------------------+
-          |          |          |       |      |
-          v          v          v       v      v
-        RTC        LCD       Keypad   LEDs   Buzzer
-          |          |          |       |      |
-          +----------+----------+-------+------+
-                            |
-                            v
-                     Train Database
-                            |
-                            v
-                    Train Status Logic
-                            |
-                   +--------+--------+
-                   |                 |
-                   v                 v
-              Normal Mode       Admin Mode
-                                      ^
-                                      |
-                                    EINT1
+The complete operation can be understood in the following sequence:
 
-⚙️ System Workflow
+          Power ON
+             |
+             v
+       Welcome Display
+             |
+             v
+        RTC Display
+             |
+             v
+     Read Current Time
+             |
+             v
+   Compare With Train Database
+             |
+             v
+      Find Upcoming Train
+             |
+             v
+   Display Train Information
+             |
+             v
+    Check Train Status
+             |
+       +-----+-----+
+       |     |     |
+       v     v     v
+    On-Time Near  Delayed
+       |     |     |
+       +-----+-----+
+             |
+             v
+       Update Display
+             |
+             v
+     Check Admin Request
+             |
+       +-----+-----+
+       |           |
+      No          Yes
+       |           |
+       |           v
+       |      Admin Mode
+       |           |
+       |           v
+       |     Modify Settings
+       |           |
+       +-----------+
+             |
+             v
+        Continue Loop
 
-Normal Operation
+The controller continuously repeats this process during normal operation.
 
-The RTC maintains the current date and time.
+🕒 RTC and Time Management
 
-The LCD displays the current time and train information.
+The RTC is responsible for maintaining the current date and time.
 
-Train schedule data is stored in the train database.
+The system uses the RTC to obtain:
 
-The controller continuously compares the RTC time with stored train timings.
+Hour
 
-The controller identifies the next train that has not yet departed.
+Minute
 
-The corresponding train information is displayed on the LCD.
+Second
 
-Train name and destination information can be displayed using a scrolling window.
+Date
 
-The controller evaluates the train's time-to-arrival and calculated delay.
+Month
 
-LED and buzzer control are updated according to the train status.
+Year
 
-After a train has departed, the controller automatically evaluates the next scheduled train.
+Day of the week
 
-Administrator Mode
+The current RTC information is displayed during the RTC display stage.
 
-Administrator mode is triggered through EINT1.
+Example:
 
-After entering administrator mode, the administrator can use the 4×4 matrix keypad to:
+09:24:55 MON
+10/08/2026
 
-Modify train arrival time.
+The RTC is also used for comparing the current time with train arrival and departure timings.
 
-Modify train departure time.
+This is important because the system does not depend on a manually entered current time during normal operation.
 
-Modify platform number.
+🚆 Train Schedule Management
 
-Select a predefined destination.
+Train schedule information is maintained in a train database.
 
-Recalculate train delay.
-
-Modify RTC time.
-
-Modify RTC date.
-
-Modify day of the week.
-
-The administrator menu operates through the LCD and keypad interface.
-
-🚦 Train Status Indication
-
-The controller determines the status of the next scheduled train using RTC time, time-to-arrival, and calculated delay information.
-
-LED
-
-Status
-
-Meaning
-
-Green
-
-On-Time
-
-Train is operating according to its schedule
-
-Yellow
-
-Approaching
-
-Train is approaching its scheduled arrival
-
-Red
-
-Delayed
-
-Train has a calculated delay
-
-The software also includes buzzer control as part of the train-status logic. Actual audible operation depends on the connected buzzer circuit and hardware configuration.
-
-🗄️ Train Database
-
-The project maintains train information using a structured train database.
-
-Each train record contains information such as:
+A train record contains information such as:
 
 Train number
 
@@ -240,13 +240,13 @@ Updated departure time
 
 Platform number
 
-Calculated delay
+Delay
 
-Example train records used in the project:
+Example records include:
 
 Train No.
 
-Train
+Train Name
 
 Destination
 
@@ -282,73 +282,255 @@ Hyderabad
 
 3
 
-20 min
+Delayed
 
-⏱️ Train Delay Calculation
+The controller compares the RTC time with the stored train schedule and selects the appropriate upcoming train.
 
-Train delay is calculated by comparing the scheduled arrival time with the updated arrival time.
+After a train's scheduled departure time has elapsed, the controller automatically moves to the next scheduled train.
 
-Scheduled Arrival
-       ↓
-Convert to minutes
-       ↓
-Updated Arrival
-       ↓
-Convert to minutes
-       ↓
-Updated - Scheduled
-       ↓
-Delay in minutes
+📺 LCD Display
 
-If the updated arrival time is later than the scheduled arrival time, the difference is stored as the train delay. Otherwise, the delay is set to zero.
+The 16×2 LCD is the main passenger information display.
 
-🖥️ LCD Display
+The software uses different display stages.
 
-The LCD uses a combination of fixed and scrolling information.
+1. Welcome Screen
 
-Line 1
+When the system starts, it displays:
 
-12345:TRAIN NAME
+Welcome To
+Smart Railway...
 
-The train number remains fixed while train name and destination information can scroll through the available display width.
+The complete project title is displayed using scrolling text.
 
-Line 2
+2. RTC Screen
 
-The display alternates between train schedule information and the current RTC time.
+The RTC screen displays the current time and date.
 
 Example:
 
+09:24:55 MON
+10/08/2026
+
+3. Normal Railway Display
+
+The normal display provides information about the upcoming train.
+
+Example:
+
+12345:TRAIN NAME
 P1 A10:30 D10:40
 
-and:
+Where:
 
-    10:25:32
+12345 = Train number
 
-This allows both train-specific information and live RTC information to be presented using the 16×2 LCD.
+TRAIN NAME = Train name/destination information
 
-🔄 Display State Machine
+P1 = Platform number
 
-The application uses different display states to manage the LCD interface:
+A10:30 = Arrival time
 
-WELCOME
-   ↓
-RTC DISPLAY
-   ↓
-WAITING FOR TRAIN
-   ↓
-TRAIN INFORMATION SCROLL
-   ↓
-STATUS / INFORMATION DISPLAY
-   ↓
-NEXT TRAIN
+D10:40 = Departure time
 
-The main loop continuously processes RTC information, train selection, display updates, train-status processing, and administrator requests.
+The train name and destination can be displayed using scrolling text because a 16×2 LCD has limited character capacity.
+
+The second LCD line can also display the current RTC time.
+
+🚦 Train Status Indication
+
+The system uses LEDs to provide a quick visual indication of train status.
+
+LED
+
+Status
+
+Meaning
+
+🟢 Green
+
+On-Time
+
+Train is operating according to schedule
+
+🟡 Yellow
+
+Approaching
+
+Train is expected to arrive shortly
+
+🔴 Red
+
+Delayed
+
+Train timing has been modified/delayed
+
+This allows passengers to understand the train condition without continuously reading the LCD.
+
+🔊 Buzzer Notification
+
+A buzzer is included to provide an audible notification.
+
+The project documentation specifies buzzer notification when:
+
+A train is about to arrive
+
+Important schedule changes occur
+
+This is useful because passengers may not continuously watch the LCD.
+
+The actual audible behavior depends on the buzzer circuit and hardware connection used with the LPC2148 board.
+
+⏱️ Train Delay Calculation
+
+The system can compare the scheduled arrival time with the updated arrival time.
+
+Conceptually:
+
+Scheduled Arrival
+       |
+       v
+Convert Time to Minutes
+       |
+       v
+Updated Arrival
+       |
+       v
+Convert Time to Minutes
+       |
+       v
+Calculate Difference
+       |
+       v
+Delay in Minutes
+
+For example:
+
+Scheduled Arrival = 08:00
+Updated Arrival   = 08:20
+
+Delay = 20 minutes
+
+If the updated arrival time is later than the scheduled arrival time, the difference represents the train delay.
+
+🔐 Administrator Mode
+
+The administrator can modify train and RTC information without changing the source code.
+
+Administrator mode is entered using an external interrupt.
+
+The basic flow is:
+
+Normal Operation
+       |
+       v
+Admin Edit Switch
+       |
+       v
+External Interrupt
+       |
+       v
+Administrator Mode
+       |
+       v
+LCD + Keypad Menu
+       |
+       v
+Modify Required Information
+       |
+       v
+Return to Normal Operation
+
+The administrator can select an existing train record and modify information such as:
+
+Arrival time
+
+Departure time
+
+Destination
+
+Platform number
+
+Other schedule information
+
+The same configuration mode can also be used to correct:
+
+RTC time
+
+RTC date
+
+Day of the week
+
+⌨️ 4×4 Matrix Keypad
+
+The keypad provides user input for the administrator configuration interface.
+
+It is used to:
+
+Select menu options
+
+Enter numeric values
+
+Modify train timings
+
+Modify platform information
+
+Select destination information
+
+Configure RTC values
+
+This eliminates the need to modify train data directly inside the source code for every schedule change.
+
+⚡ External Interrupt
+
+The administrator edit switch is connected to an external interrupt input.
+
+When the administrator activates the switch:
+
+Admin Switch
+     |
+     v
+External Interrupt
+     |
+     v
+Admin Request Flag
+     |
+     v
+Main Application Detects Request
+     |
+     v
+AdminMode()
+
+The interrupt mechanism allows the normal railway display operation to be interrupted so that the administrator configuration interface can be entered.
+
+🧱 Software Architecture
+
+The project is divided into multiple modules instead of putting the entire application into one source file.
+
+                    +------------------+
+                    |      main.c      |
+                    | Main Application |
+                    +--------+---------+
+                             |
+        +--------------------+--------------------+
+        |          |         |        |            |
+        v          v         v        v            v
+       RTC        LCD      Keypad    EINT        Status
+        |          |         |        |            |
+        +----------+---------+--------+------------+
+                             |
+                             v
+                      Train Database
+                             |
+                             v
+                       Admin Module
+
+This modular structure makes the project easier to understand, debug, maintain, and extend.
 
 📁 Project Structure
 
 Smart-Railway-Platform-Clock-Announcement-Controller/
 │
-├── .gitignore
 ├── main.c
 │
 ├── admin.c
@@ -388,84 +570,146 @@ Smart-Railway-Platform-Clock-Announcement-Controller/
 ├── smart_railways.uvproj
 │
 ├── CHANGES.md
-└── test_cases.md
+├── test_cases.md
+└── .gitignore
 
 🧩 Software Modules
 
 main.c
 
-Controls the main application flow, RTC processing, train selection, LCD display states, and administrator-mode handling.
+The main application module.
+
+It controls:
+
+Startup sequence
+
+RTC display
+
+Train display
+
+Train selection
+
+Display scrolling
+
+Train status processing
+
+Administrator request handling
+
+The main loop continuously processes the system state.
 
 rtc.c / rtc.h
 
-Handles RTC initialization, time/date reading, and RTC configuration.
+Responsible for RTC functionality.
+
+It handles:
+
+RTC initialization
+
+Reading current time
+
+Reading current date
+
+RTC configuration
+
+Time/date updates
 
 lcd.c / lcd.h
 
-Provides LCD initialization, command handling, character display, and string display functions.
+Responsible for 16×2 LCD interfacing.
+
+It provides functions for:
+
+LCD initialization
+
+Sending commands
+
+Displaying characters
+
+Displaying strings
+
+Moving the LCD cursor
+
+Updating display positions
 
 kpm.c / kpm.h
 
-Handles 4×4 matrix keypad scanning and numeric/user input.
+Responsible for 4×4 matrix keypad interfacing.
+
+It handles:
+
+Key scanning
+
+Numeric input
+
+Menu selection
+
+Administrator input
 
 eint.c / eint.h
 
-Handles external interrupt functionality used to enter administrator mode.
+Responsible for external interrupt functionality.
+
+It detects the administrator edit request and allows the main application to enter administrator mode.
 
 train_db.c / train_db.h
 
-Contains train records and train database structures.
+Contains the train database and train-related structures.
+
+It stores information such as:
+
+Train number
+
+Train name
+
+Destination
+
+Arrival time
+
+Departure time
+
+Platform
+
+Delay
 
 status.c / status.h
 
-Handles train-status evaluation and LED/buzzer control.
+Responsible for train status processing and output indication.
+
+It handles the logic associated with:
+
+Train status
+
+LED indication
+
+Buzzer control
 
 admin.c / admin.h
 
-Provides administrator functionality for modifying train information and RTC settings.
+Responsible for administrator configuration.
+
+It provides functionality for modifying:
+
+Train schedule information
+
+Platform information
+
+Destination information
+
+RTC settings
 
 delay.c / delay.h
 
-Provides delay-related functionality used by the application.
-
-🔐 Administrator Configuration
-
-The administrator mode uses the external interrupt to enter the configuration interface.
-
-The train-edit menu provides options for:
-
-1) Arrival
-2) Departure
-3) Platform
-4) Done
-
-Destination selection is performed using predefined station choices supported by the keypad interface.
-
-The RTC configuration menu allows modification of:
-
-Hour
-
-Minute
-
-Second
-
-Date
-
-Month
-
-Year
-
-Day of week
+Contains delay-related timing functionality used by the application.
 
 🧪 Testing
 
-The project includes a dedicated test_cases.md file containing functional test cases.
+The project contains a test_cases.md file for functional testing.
 
-Testing covers the major functional areas of the system, including:
+Important areas tested include:
 
 RTC operation
 
-LCD display
+LCD operation
 
 Keypad input
 
@@ -473,103 +717,211 @@ Train database handling
 
 Train selection
 
+Train arrival/departure display
+
 Train delay calculation
 
-Train status indication
-
-Administrator configuration
-
-External interrupt functionality
-
-RTC configuration
+LED status indication
 
 Buzzer control
 
-Automatic train information updates
+Administrator mode
 
-🔧 Build and Program
+External interrupt operation
 
-The project is developed for the LPC2148 using Embedded C and the Keil development environment.
+RTC configuration
 
-Basic Workflow
+Automatic transition to the next train
 
-Source Code
-    ↓
-Keil Build
-    ↓
-Generate HEX
-    ↓
+Testing the modules individually before testing the complete system helps identify hardware and software integration problems.
+
+🔧 Development and Programming
+
+The project was developed using:
+
+Microcontroller : LPC2148
+CPU Architecture: ARM7
+Programming      : Embedded C
+IDE              : Keil
+Programming Tool : Flash Magic
+Display          : 16×2 LCD
+Input            : 4×4 Matrix Keypad
+Timekeeping      : RTC
+Status           : LEDs
+Audio Alert      : Buzzer
+Interrupt        : External Interrupt
+
+The basic development workflow is:
+
+Write Embedded C Code
+        ↓
+Compile in Keil
+        ↓
+Build Project
+        ↓
+Generate HEX File
+        ↓
 Program LPC2148
-    ↓
+        ↓
 Connect Hardware
-    ↓
-Test System
+        ↓
+Test Functionality
 
-The generated build files and compiler artifacts are intentionally excluded from this Git repository using .gitignore.
+🧠 Embedded Concepts Demonstrated
 
-📋 Design Approach
+This project demonstrates practical implementation of several embedded-system concepts:
 
-The project follows a modular embedded software structure where individual peripherals and functional blocks are separated into dedicated source and header files.
+Microcontroller Programming
 
-This approach improves:
+Programming the LPC2148 ARM7 microcontroller using Embedded C.
 
-Code organization
+Peripheral Interfacing
 
-Maintainability
+Interfacing multiple peripherals with the microcontroller:
 
-Reusability
+LCD
 
-Debugging
+Matrix keypad
 
-Peripheral-level testing
+RTC
 
-Project scalability
+LEDs
 
-The main application combines these modules to implement RTC-driven train scheduling and status management.
+Buzzer
+
+Interrupt Handling
+
+Using an external interrupt to trigger administrator configuration mode.
+
+Real-Time Processing
+
+Continuously comparing RTC time against train schedule information.
+
+State-Based Application Design
+
+Managing different application stages such as:
+
+Welcome
+
+RTC display
+
+Train display
+
+Status indication
+
+Administrator mode
+
+Data Management
+
+Maintaining multiple train records using structured data.
+
+Time Calculations
+
+Comparing scheduled and updated timings to determine train delay.
+
+Hardware and Software Integration
+
+Combining peripheral drivers, application logic, and physical hardware into a single embedded system.
+
+📈 Why This Project Is Useful
+
+A conventional platform display may require manual updating whenever train schedules change.
+
+This project attempts to automate that process by continuously comparing the current RTC time with stored train schedules.
+
+Instead of manually deciding which train should be displayed, the controller can:
+
+Read Current Time
+       ↓
+Compare Train Schedules
+       ↓
+Identify Upcoming Train
+       ↓
+Display Train Information
+       ↓
+Indicate Train Status
+       ↓
+Move to Next Train
+
+This reduces manual intervention and provides continuously updated passenger information.
 
 🚀 Future Improvements
 
-Possible future improvements include:
+The current project can be extended in several ways:
 
-EEPROM/Flash-based persistent train schedule storage.
+Store train schedules permanently in EEPROM or Flash.
 
-UART-based schedule updates.
+Add UART communication for updating schedules from a PC.
 
-Real-time communication with an external railway information system.
+Connect the controller to an external railway information system.
 
-Multiple platform support.
+Support multiple railway platforms simultaneously.
 
-Automatic voice announcement using an audio module.
+Add a dedicated voice/audio announcement module.
 
-Improved administrator authentication.
+Add stronger administrator authentication.
 
-Persistent configuration storage.
+Add persistent configuration storage.
 
-Expanded automated test coverage.
+Add more automated test cases.
 
-Improved buzzer hardware integration.
+Improve buzzer hardware integration.
 
-📚 Technologies Used
+Add a larger graphical display for more train information.
 
-Microcontroller : LPC2148
-Architecture    : ARM7
-Language        : Embedded C
-Display         : 16×2 LCD
-Input           : 4×4 Matrix Keypad
-Timekeeping     : RTC
-Indicators      : LEDs
-Alert Control   : Buzzer
-Interrupt       : External Interrupt (EINT1)
-IDE             : Keil
-Programming     : Flash Magic
+📚 Documentation
 
-🎓 Skills Demonstrated
+The repository contains additional project documentation:
 
-Embedded C programming
+CHANGES.md — project development changes and information
 
-ARM7/LPC2148 microcontroller programming
+test_cases.md — functional test cases
 
-GPIO and peripheral interfacing
+Source files (.c) — implementation of individual modules
+
+Header files (.h) — module interfaces and definitions
+
+Keil project files — project configuration and build information
+
+⭐ Project Highlights
+
+The main engineering aspects of this project are:
+
+LPC2148 ARM7 Embedded C development
+
+RTC-based real-time scheduling
+
+Automatic upcoming-train selection
+
+16×2 LCD passenger information display
+
+Scrolling train name and destination
+
+4×4 matrix keypad input
+
+External interrupt-based administrator mode
+
+Train schedule modification
+
+Train delay calculation
+
+LED-based train status indication
+
+Buzzer-based notification
+
+Modular embedded software architecture
+
+Hardware and software integration
+
+👨‍💻 Skills Demonstrated
+
+Embedded C
+
+ARM7 architecture
+
+LPC2148 microcontroller
+
+GPIO interfacing
 
 LCD interfacing
 
@@ -581,54 +933,20 @@ External interrupt handling
 
 Embedded state-machine design
 
-Train schedule data management
-
 Time-based event processing
 
-Train delay calculation
+Train schedule management
+
+Delay calculation
 
 LED and buzzer control
 
 Modular driver development
 
-Hardware/software integration
+Hardware debugging
 
-📄 Documentation
+Embedded system integration
 
-Additional project documentation is available in:
+📌 Project Type
 
-CHANGES.md — project changes and development information
-
-test_cases.md — functional test cases and validation
-
-Source and header files — individual peripheral and application modules
-
-⭐ Project Highlights
-
-This project demonstrates a practical embedded-system implementation using the LPC2148 ARM7 microcontroller, combining peripheral drivers with application-level scheduling logic.
-
-Key implementation areas include:
-
-RTC-driven train scheduling
-
-Automatic next-train selection
-
-LCD-based train information display
-
-Scrolling train name and destination
-
-Keypad-based configuration
-
-External interrupt-based administrator mode
-
-Train delay calculation
-
-LED-based train-status indication
-
-Integrated buzzer control
-
-Modular Embedded C architecture
-
-👨‍💻 Project Type
-
-Embedded Systems | Embedded C | ARM7 | LPC2148 | Microcontroller | Real-Time Scheduling | Peripheral Interfacing
+Embedded Systems | Embedded C | ARM7 | LPC2148 | RTC | LCD | Matrix Keypad | External Interrupt | Real-Time Scheduling | Peripheral Interfacing
