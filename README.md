@@ -130,6 +130,9 @@ Flash Magic
 
 LPC2148 development board
 
+
+![System Block Diagram](Smart Railway Platform Clock and Announcement Controller.png)
+
 🔄 How the System Works
 
 The complete operation can be understood in the following sequence:
