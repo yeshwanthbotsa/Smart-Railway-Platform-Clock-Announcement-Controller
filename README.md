@@ -30,6 +30,8 @@ The selected train information is then shown on the 16×2 LCD. The system can al
 
 An administrator can enter a configuration mode using an external interrupt and the 4×4 keypad. This allows train schedule information and RTC settings to be modified without changing the source code.
 
+![Smart Railway Platform Clock and Announcement Controller](Smart%20Railway%20Platform%20Clock%20and%20Announcement%20Controller.png)
+
 🎯 Project Aim
 
 To develop a Smart Railway Platform Clock & Announcement Controller that automatically manages:
@@ -130,8 +132,6 @@ Flash Magic
 
 LPC2148 development board
 
-
-![System Block Diagram](Smart Railway Platform Clock and Announcement Controller.png)
 
 🔄 How the System Works
 
