@@ -1,0 +1,47 @@
+name: Organize Embedded Project
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  organize:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create folders
+        run: |
+          mkdir -p src
+          mkdir -p include
+          mkdir -p startup
+
+      - name: Move C source files
+        run: |
+          find . -maxdepth 1 -type f -name "*.c" -exec git mv {} src/ \;
+
+      - name: Move header files
+        run: |
+          find . -maxdepth 1 -type f -name "*.h" -exec git mv {} include/ \;
+
+      - name: Move startup assembly
+        run: |
+          if [ -f "Startup.s" ]; then
+            git mv Startup.s startup/
+          fi
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if ! git diff --cached --quiet; then
+            git commit -m "Organize embedded project structure"
+            git push
+          else
+            echo "No files to move"
+          fi
